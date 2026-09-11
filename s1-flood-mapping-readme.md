@@ -70,7 +70,7 @@ This example illustrates how the workflow can be configured and interpreted for 
 
   Figure 1 - GEE run (annotated)
 
-  <img width="1919" height="1113" alt="Screenshot 2026-01-09 114552" src="https://gist.github.com/user-attachments/assets/4e65e848-d360-4f73-b5e9-8339770256ce" />
+  <img width="1919" height="1113" alt="Screenshot 2026-01-09 114552" src="[https://gist.github.com/user-attachments/assets/4e65e848-d360-4f73-b5e9-8339770256ce](https://github-production-user-asset-6210df.s3.amazonaws.com/722584/533732590-4e65e848-d360-4f73-b5e9-8339770256ce.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260911%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260911T170259Z&X-Amz-Expires=300&X-Amz-Signature=0465f513b96f7596bf181a5792e08582d86ba98134caf94a7e3d2b1814f79a96&X-Amz-SignedHeaders=host&response-content-type=image%2Fpng)" />
 
   *Figure 1. Screenshot from Google Earth Engine Code Editor showing the fused flood-probability output and/or flood mask for the Blangkejeren AOI. The **red circle** highlights a reference landmark (the bridge across the Aih Bobo River) that is reported to have collapsed, as shown in Figure 2.*
 
