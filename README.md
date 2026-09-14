@@ -325,8 +325,3 @@ Field validation is mandatory for operational decision-making.
 * **“Memory exceeded / timeout”**
   * Reduce AOI; enable sampling histograms; increase export scale; turn off extra layers.
 
-
-## 15. License
-
-Public domain.
-
