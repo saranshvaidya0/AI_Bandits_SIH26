@@ -325,18 +325,6 @@ Field validation is mandatory for operational decision-making.
 * **“Memory exceeded / timeout”**
   * Reduce AOI; enable sampling histograms; increase export scale; turn off extra layers.
 
----
-
-## 13. References / useful links
-
-* World Bank GOST SAR tools (Flood Analysis & Mapping):
-  [https://github.com/worldbank/GOST_SAR/tree/master/Flood%20Analysis%20and%20Mapping](https://github.com/worldbank/GOST_SAR/tree/master/Flood%20Analysis%20and%20Mapping)
-* UNOSAT (UNITAR) products portal:
-  [https://unosat.org/](https://unosat.org/)
-* Cyclone Senyar background:
-  [https://en.wikipedia.org/wiki/Cyclone_Senyar](https://en.wikipedia.org/wiki/Cyclone_Senyar)
-
----
 
 ## 15. License
 
