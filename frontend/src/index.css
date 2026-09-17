@@ -1,0 +1,422 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+/* ============================================================
+   THEME DESIGN TOKENS — CSS Custom Properties
+   Dark mode is the default (:root). Light mode is [data-theme="light"].
+   ============================================================ */
+
+:root {
+  /* Backgrounds */
+  --bg-base:         #000f22;
+  --bg-surface:      rgba(3, 19, 41, 0.45);
+  --bg-surface-solid:#031329;
+  --bg-elevated:     rgba(6, 26, 56, 0.85);
+  --bg-input:        #061a38;
+  --bg-card:         rgba(12, 38, 77, 0.32);
+  --bg-overlay:      rgba(0, 15, 34, 0.85);
+
+  /* Foreground / Text */
+  --fg-primary:      #f8fafc;
+  --fg-secondary:    #94a3b8;
+  --fg-muted:        #64748b;
+  --fg-accent:       #38bdf8;
+  --fg-accent-dim:   #7dd3fc;
+
+  /* Borders */
+  --border-default:  rgba(56, 189, 248, 0.25);
+  --border-accent:   rgba(56, 189, 248, 0.35);
+  --border-strong:   rgba(56, 189, 248, 0.50);
+
+  /* Glassmorphism */
+  --glass-bg:        rgba(6, 26, 56, 0.42);
+  --glass-border:    rgba(56, 189, 248, 0.30);
+  --glass-shadow:    0 8px 32px 0 rgba(0, 15, 34, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+  --card-bg:         rgba(12, 38, 77, 0.32);
+  --card-border:     rgba(56, 189, 248, 0.22);
+  --card-shadow:     0 4px 20px 0 rgba(0, 15, 34, 0.35);
+
+  /* Scrollbar */
+  --scrollbar-track: #000f22;
+  --scrollbar-thumb: #0284c7;
+
+  /* Leaflet */
+  --leaflet-bg:      #000f22;
+  --leaflet-popup-bg:rgba(6, 26, 56, 0.95);
+
+  /* Transitions */
+  --theme-transition: background-color 250ms ease, color 250ms ease, border-color 250ms ease, box-shadow 250ms ease, background 250ms ease;
+
+  /* Body gradient */
+  --body-gradient:
+    radial-gradient(circle at 15% 15%, rgba(2, 132, 199, 0.25) 0%, transparent 50%),
+    radial-gradient(circle at 85% 85%, rgba(56, 189, 248, 0.20) 0%, transparent 45%),
+    radial-gradient(circle at 50% 30%, rgba(0, 229, 255, 0.12) 0%, transparent 60%);
+}
+
+/* ============================================================
+   LIGHT THEME OVERRIDES
+   ============================================================ */
+html[data-theme="light"] {
+  /* Backgrounds */
+  --bg-base:         #ECEFF1;
+  --bg-surface:      rgba(207, 216, 220, 0.70);
+  --bg-surface-solid:#CFD8DC;
+  --bg-elevated:     rgba(255, 255, 255, 0.92);
+  --bg-input:        rgba(255, 255, 255, 0.90);
+  --bg-card:         rgba(255, 255, 255, 0.65);
+  --bg-overlay:      rgba(176, 190, 197, 0.85);
+
+  /* Foreground / Text */
+  --fg-primary:      #263238;
+  --fg-secondary:    #455A64;
+  --fg-muted:        #78909C;
+  --fg-accent:       #0284c7;
+  --fg-accent-dim:   #0369a1;
+
+  /* Borders */
+  --border-default:  rgba(84, 110, 122, 0.30);
+  --border-accent:   rgba(2, 132, 199, 0.35);
+  --border-strong:   rgba(2, 132, 199, 0.55);
+
+  /* Glassmorphism — translucent white / blue-gray */
+  --glass-bg:        rgba(255, 255, 255, 0.65);
+  --glass-border:    rgba(69, 90, 100, 0.22);
+  --glass-shadow:    0 8px 32px 0 rgba(38, 50, 56, 0.14), inset 0 1px 1px 0 rgba(255, 255, 255, 0.85);
+  --card-bg:         rgba(255, 255, 255, 0.60);
+  --card-border:     rgba(2, 132, 199, 0.20);
+  --card-shadow:     0 4px 20px 0 rgba(38, 50, 56, 0.10);
+
+  /* Scrollbar */
+  --scrollbar-track: #ECEFF1;
+  --scrollbar-thumb: #90A4AE;
+
+  /* Leaflet */
+  --leaflet-bg:      #CFD8DC;
+  --leaflet-popup-bg:rgba(255, 255, 255, 0.97);
+
+  /* Body gradient — soft light blue-gray orbs */
+  --body-gradient:
+    radial-gradient(circle at 15% 15%, rgba(2, 132, 199, 0.10) 0%, transparent 50%),
+    radial-gradient(circle at 85% 85%, rgba(144, 164, 174, 0.20) 0%, transparent 45%),
+    radial-gradient(circle at 50% 30%, rgba(120, 144, 156, 0.08) 0%, transparent 60%);
+}
+
+/* ============================================================
+   GLOBAL ELEMENT TRANSITIONS — smooth theme switching
+   ============================================================ */
+*, *::before, *::after {
+  transition: var(--theme-transition);
+}
+
+/* Explicitly exclude expensive / map-breaking transitions */
+.leaflet-container *,
+.leaflet-container *::before,
+.leaflet-container *::after,
+canvas,
+video {
+  transition: none !important;
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+@layer base {
+  body {
+    background-color: var(--bg-base);
+    background-image: var(--body-gradient);
+    color: var(--fg-primary);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow: hidden;
+    user-select: none;
+  }
+}
+
+/* ============================================================
+   GLASSMORPHISM PANELS & CARDS — Theme-Aware via CSS Vars
+   ============================================================ */
+.glass-panel {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+
+.glass-card {
+  background: var(--card-bg) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  border: 1px solid var(--card-border) !important;
+  box-shadow: var(--card-shadow) !important;
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-card-hover:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-strong) !important;
+  box-shadow: 0 10px 30px -5px rgba(56, 189, 248, 0.25), inset 0 0 15px rgba(56, 189, 248, 0.10) !important;
+}
+
+html[data-theme="light"] .glass-card-hover:hover {
+  border-color: rgba(2, 132, 199, 0.50) !important;
+  box-shadow: 0 10px 30px -5px rgba(2, 132, 199, 0.18), inset 0 0 15px rgba(2, 132, 199, 0.08) !important;
+}
+
+/* ============================================================
+   SEMANTIC THEME UTILITY CLASSES
+   Use these on structural elements instead of hardcoded hex classes
+   ============================================================ */
+.t-bg-surface   { background: var(--bg-surface) !important; }
+.t-bg-elevated  { background: var(--bg-elevated) !important; }
+.t-bg-input     { background: var(--bg-input) !important; }
+.t-bg-card      { background: var(--bg-card) !important; }
+.t-bg-overlay   { background: var(--bg-overlay) !important; }
+
+.t-text-primary   { color: var(--fg-primary) !important; }
+.t-text-secondary { color: var(--fg-secondary) !important; }
+.t-text-muted     { color: var(--fg-muted) !important; }
+.t-text-accent    { color: var(--fg-accent) !important; }
+.t-text-accent-dim{ color: var(--fg-accent-dim) !important; }
+
+.t-border         { border-color: var(--border-default) !important; }
+.t-border-accent  { border-color: var(--border-accent) !important; }
+
+/* ============================================================
+   GLOBAL LIGHT-MODE TEXT OVERRIDES
+   These cover all Tailwind text-slate-* classes used across components,
+   overriding them globally when light mode is active — no per-component changes needed.
+   ============================================================ */
+html[data-theme="light"] .text-white,
+html[data-theme="light"] .text-slate-100 {
+  color: var(--fg-primary) !important;
+}
+html[data-theme="light"] .text-slate-200 {
+  color: #37474F !important;
+}
+html[data-theme="light"] .text-slate-300 {
+  color: var(--fg-secondary) !important;
+}
+html[data-theme="light"] .text-slate-400 {
+  color: var(--fg-muted) !important;
+}
+html[data-theme="light"] .text-slate-600 {
+  color: #90A4AE !important;
+}
+/* Accent cyan colors — keep readable in light mode */
+html[data-theme="light"] .text-\[\#38bdf8\],
+html[data-theme="light"] .text-\[\#7dd3fc\],
+html[data-theme="light"] .text-cyan-300 {
+  color: #0284c7 !important;
+}
+html[data-theme="light"] .text-\[\#0ea5e9\] {
+  color: #0369a1 !important;
+}
+
+/* ============================================================
+   GLOBAL LIGHT-MODE BACKGROUND OVERRIDES
+   Cover all hardcoded bg classes that appear in components.
+   ============================================================ */
+
+/* Main surface / panel backgrounds */
+html[data-theme="light"] .bg-\[\#031329\]\/45,
+html[data-theme="light"] .bg-\[\#031329\]\/80,
+html[data-theme="light"] .bg-\[\#031329\]\/90 {
+  background-color: rgba(207, 216, 220, 0.70) !important;
+}
+html[data-theme="light"] .bg-\[\#031329\] {
+  background-color: #CFD8DC !important;
+}
+html[data-theme="light"] .bg-\[\#061a38\]\/80,
+html[data-theme="light"] .bg-\[\#061a38\]\/90 {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+}
+html[data-theme="light"] .bg-\[\#061a38\] {
+  background-color: rgba(255, 255, 255, 0.90) !important;
+}
+
+/* Slate-950 usage (app root div) */
+html[data-theme="light"] .bg-slate-950 {
+  background-color: var(--bg-base) !important;
+}
+
+/* Table backgrounds */
+html[data-theme="light"] table thead.bg-\[\#061a38\],
+html[data-theme="light"] thead.bg-\[\#061a38\] {
+  background-color: rgba(207, 216, 220, 0.80) !important;
+}
+html[data-theme="light"] tbody.bg-\[\#031329\]\/80 {
+  background-color: rgba(255, 255, 255, 0.60) !important;
+}
+html[data-theme="light"] .divide-\[\#38bdf8\]\/20 > * + * {
+  border-color: rgba(2, 132, 199, 0.20) !important;
+}
+
+/* Modal / overlay dark backgrounds */
+html[data-theme="light"] .bg-\[\#000f22\]\/85 {
+  background-color: rgba(176, 190, 197, 0.85) !important;
+}
+
+/* Borders */
+html[data-theme="light"] .border-\[\#38bdf8\]\/25 {
+  border-color: rgba(84, 110, 122, 0.30) !important;
+}
+html[data-theme="light"] .border-\[\#38bdf8\]\/30 {
+  border-color: rgba(2, 132, 199, 0.25) !important;
+}
+html[data-theme="light"] .border-\[\#38bdf8\]\/35 {
+  border-color: rgba(2, 132, 199, 0.30) !important;
+}
+html[data-theme="light"] .border-\[\#38bdf8\]\/40 {
+  border-color: rgba(2, 132, 199, 0.35) !important;
+}
+html[data-theme="light"] .border-\[\#38bdf8\]\/20 {
+  border-color: rgba(2, 132, 199, 0.20) !important;
+}
+html[data-theme="light"] .border-b.border-\[\#38bdf8\]\/20 {
+  border-color: rgba(2, 132, 199, 0.20) !important;
+}
+
+/* Input elements in light mode */
+html[data-theme="light"] input[class*="bg-[#061a38]"],
+html[data-theme="light"] select[class*="bg-transparent"],
+html[data-theme="light"] input.bg-\[\#061a38\] {
+  background-color: rgba(255, 255, 255, 0.90) !important;
+  color: #263238 !important;
+}
+
+/* Search input in header */
+html[data-theme="light"] input[class*="bg-[#061a38]"] {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  color: #263238 !important;
+}
+html[data-theme="light"] input::placeholder {
+  color: #78909C !important;
+}
+
+/* Map simulation progress in light mode */
+html[data-theme="light"] .border-\[\#38bdf8\]\/40 {
+  border-color: rgba(2, 132, 199, 0.35) !important;
+}
+
+/* ============================================================
+   GRADIENT BUTTONS — Remain consistent across themes
+   ============================================================ */
+.btn-blue-gradient {
+  background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.40) !important;
+  transition: all 0.25s ease !important;
+}
+.btn-blue-gradient:hover {
+  background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%) !important;
+  box-shadow: 0 0 28px rgba(56, 189, 248, 0.65) !important;
+}
+
+.btn-secondary-blue {
+  background: rgba(2, 132, 199, 0.20) !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  color: #7dd3fc !important;
+  transition: all 0.2s ease !important;
+}
+.btn-secondary-blue:hover {
+  background: rgba(2, 132, 199, 0.45) !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+}
+html[data-theme="light"] .btn-secondary-blue {
+  background: rgba(2, 132, 199, 0.12) !important;
+  border-color: rgba(2, 132, 199, 0.35) !important;
+  color: #0369a1 !important;
+}
+html[data-theme="light"] .btn-secondary-blue:hover {
+  background: rgba(2, 132, 199, 0.25) !important;
+  color: #023e6e !important;
+}
+
+/* ============================================================
+   SCROLLBARS — Theme-Aware
+   ============================================================ */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 3px;
+  border: 1px solid var(--border-default);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--fg-accent); }
+
+/* ============================================================
+   LEAFLET MAP — Theme-Aware
+   (Map data/layers remain unchanged — only chrome/UI is themed)
+   ============================================================ */
+.leaflet-container {
+  background-color: var(--leaflet-bg) !important;
+  font-family: inherit;
+  z-index: 10;
+}
+
+.leaflet-popup-content-wrapper {
+  background: var(--leaflet-popup-bg) !important;
+  color: var(--fg-primary) !important;
+  border: 1px solid var(--border-accent) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 30px rgba(0, 15, 34, 0.60), 0 0 15px rgba(56, 189, 248, 0.20) !important;
+  backdrop-filter: blur(12px) !important;
+}
+html[data-theme="light"] .leaflet-popup-content-wrapper {
+  box-shadow: 0 8px 24px rgba(38, 50, 56, 0.18), 0 0 10px rgba(2, 132, 199, 0.12) !important;
+}
+
+.leaflet-popup-tip {
+  background: var(--leaflet-popup-bg) !important;
+}
+
+.leaflet-control-zoom a {
+  background: var(--bg-elevated) !important;
+  color: var(--fg-accent) !important;
+  border-color: var(--border-default) !important;
+}
+.leaflet-control-zoom a:hover {
+  background: rgba(2, 132, 199, 0.90) !important;
+  color: #ffffff !important;
+}
+
+/* ============================================================
+   BADGE / ACCENT BG — Light mode adjustments
+   ============================================================ */
+html[data-theme="light"] .bg-\[\#0284c7\]\/30 {
+  background-color: rgba(2, 132, 199, 0.12) !important;
+}
+html[data-theme="light"] .bg-\[\#0284c7\]\/20 {
+  background-color: rgba(2, 132, 199, 0.10) !important;
+}
+html[data-theme="light"] .bg-\[\#0284c7\]\/40 {
+  background-color: rgba(2, 132, 199, 0.18) !important;
+}
+
+/* Hover states in light mode */
+html[data-theme="light"] .hover\:bg-\[\#0284c7\]\/20:hover {
+  background-color: rgba(2, 132, 199, 0.15) !important;
+}
+html[data-theme="light"] .hover\:bg-\[\#0284c7\]\/30:hover {
+  background-color: rgba(2, 132, 199, 0.18) !important;
+}
+html[data-theme="light"] .hover\:bg-\[\#0284c7\]\/40:hover {
+  background-color: rgba(2, 132, 199, 0.22) !important;
+}
+
+/* Sidebar active item glow in light mode */
+html[data-theme="light"] .shadow-\[0_0_18px_rgba\(56\,189\,248\,0\.5\)\] {
+  box-shadow: 0 0 18px rgba(2, 132, 199, 0.35) !important;
+}
+
+/* Sidebar bottom promo card */
+html[data-theme="light"] .from-\[\#0284c7\]\/25 {
+  --tw-gradient-from: rgba(2, 132, 199, 0.10) !important;
+}
+html[data-theme="light"] .to-\[\#000f22\] {
+  --tw-gradient-to: #ECEFF1 !important;
+}

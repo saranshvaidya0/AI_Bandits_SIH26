@@ -1,0 +1,25 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Narmada River Reach (Sardar Sarovar Downstream)",
+        "river_id": "river_narmada_01",
+        "state": "Gujarat"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [73.7486, 21.8315],
+          [73.7250, 21.8380],
+          [73.7000, 21.8450],
+          [73.6700, 21.8550],
+          [73.6400, 21.8650],
+          [73.6100, 21.8750],
+          [73.5800, 21.8850]
+        ]
+      }
+    }
+  ]
+}
